@@ -1,0 +1,25 @@
+---
+layout: default
+---
+
+{% for post in paginator.posts %}
+  <article style="margin-bottom: 80px; border-bottom: 2px solid #eee; padding-bottom: 60px;">
+    {% include post-meta.html item=post is_list=true %}
+    
+    <div class="post-content" style="line-height: 1.6; font-size: 1.1em; color: #222;">
+      {{ post.content }}
+    </div>
+  </article>
+{% endfor %}
+
+{% if paginator.total_pages > 1 %}
+<nav class="pagination" style="text-align: center; margin-top: 40px; padding-bottom: 80px;">
+  {% if paginator.previous_page %}
+    <a href="{{ paginator.previous_page_path | relative_url }}" style="color: #b03931; font-weight: bold; text-decoration: none; margin-right: 20px;">&larr; Newer Articles</a>
+  {% endif %}
+  <span style="color: #888;">Page {{ paginator.page }} of {{ paginator.total_pages }}</span>
+  {% if paginator.next_page %}
+    <a href="{{ paginator.next_page_path | relative_url }}" style="color: #b03931; font-weight: bold; text-decoration: none; margin-left: 20px;">Older Articles &rarr;</a>
+  {% endif %}
+</nav>
+{% endif %}

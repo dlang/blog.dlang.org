@@ -1,0 +1,54 @@
+<div class="sidebar-section" style="margin-bottom: 30px;">
+  <form action="{{ '/search' | relative_url }}" method="get" style="display: flex; align-items: stretch; gap: 0; width: 100%; max-width: 280px; border: 1px solid #ccc; border-radius: 3px; overflow: hidden; margin-bottom: 15px;">
+    <input type="text" name="q" placeholder="Search..." 
+           style="flex: 1; padding: 8px 10px; border: none; font-size: 0.95em; outline: none; color: #333;">
+    <button type="submit" style="padding: 0 12px; cursor: pointer; background: #f4f4f4; border: none; border-left: 1px solid #ccc; display: flex; align-items: center; justify-content: center;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"></circle>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+      </svg>
+    </button>
+  </form>
+
+  <div style="display: flex; flex-direction: column; gap: 12px; padding-left: 2px;">
+    <a href="{{ '/feed.xml' | relative_url }}" style="text-decoration: none; color: #b03931; font-weight: bold; font-size: 0.9em; display: flex; align-items: center; gap: 8px;">
+      <span style="background: #b03931; color: white; padding: 2px 6px; border-radius: 3px; font-size: 0.7em;">RSS</span> RSS FEED
+    </a>
+    <a href="https://x.com/d_programming" target="_blank" style="text-decoration: none; color: #666; font-size: 0.9em; display: inline-flex; align-items: center; gap: 8px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      Follow @D_Programming
+    </a>
+  </div>
+</div>
+
+<div class="sidebar-section" style="margin-bottom: 35px;">
+  <h4 style="font-size: 0.85em; letter-spacing: 1px; color: #888; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 15px; text-transform: uppercase;">Recent Articles</h4>
+  <ul style="list-style: none; padding: 0; margin: 0;">
+    {% for post in site.posts limit:8 %}
+      <li style="margin-bottom: 14px;">
+        <a href="{{ post.url | relative_url }}" style="color: #b03931; text-decoration: none; font-weight: 500; font-size: 0.95em; line-height: 1.3; display: block;">
+          {{ post.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div class="sidebar-section">
+  <div style="background: white; padding: 5px; border: 1px solid #eee; border-radius: 4px;" class="banner-shadow">
+    <a href="https://dlang.org/shop.html" style="display: block;">
+      <img src="{{ '/assets/images/do-it-in-d-banner.png' | relative_url }}" alt="Do it in D" style="width: 100%; display: block; border-radius: 2px;">
+    </a>
+  </div>
+  <p style="font-size: 0.85em; color: #666; margin: 15px 0 25px; line-height: 1.4;">
+    Support the D Language Foundation at the <a href="https://store.dlang.org/" style="color: #b03931; font-weight: bold; text-decoration: none;">DO IT IN D shop!</a>
+  </p>
+  <div style="text-align: center; border-top: 1px dashed #ddd; padding-top: 20px;">
+    <a href="https://dlang.org/donate.html">
+      <img src="{{ '/assets/images/donatenew.png' | relative_url }}" alt="Donate" style="max-width: 140px;">
+    </a>
+    <p style="font-size: 0.85em; color: #666; margin-top: 10px;">
+      Or make a <a href="https://dlang.org/donate.html" style="color: #b03931; font-weight: bold; text-decoration: none;">direct donation</a>.
+    </p>
+  </div>
+</div>

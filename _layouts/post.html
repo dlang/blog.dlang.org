@@ -1,0 +1,33 @@
+---
+layout: default
+---
+<article class="post">
+  {% include post-meta.html %}
+  
+  <div class="post-content" style="line-height: 1.6; font-size: 1.1em; color: #222;">
+    {{ content }}
+  </div>
+
+  <div class="related-posts" style="margin-top: 60px; padding-top: 30px; border-top: 2px solid #eee;">
+    <h3 style="font-size: 1.3em; margin-bottom: 20px;">Related Articles</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+      {% assign maxRelated = 3 %}
+      {% assign relatedCount = 0 %}
+      {% for post in site.posts %}
+        {% if post.url != page.url %}
+          {% assign match = false %}
+          {% for cat in post.categories %}{% if page.categories contains cat %}{% assign match = true %}{% endif %}{% endfor %}
+          {% if match and relatedCount < maxRelated %}
+            <div style="background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 4px;">
+              <h4 style="margin: 0 0 10px 0; font-size: 1rem;">
+                <a href="{{ post.url | relative_url }}" style="color: #b03931; text-decoration: none;">{{ post.title }}</a>
+              </h4>
+              <small style="color: #888;">{{ post.date | date: "%b %d, %Y" }}</small>
+            </div>
+            {% assign relatedCount = relatedCount | plus: 1 %}
+          {% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</article>

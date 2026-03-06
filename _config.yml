@@ -1,0 +1,24 @@
+title: D Language Blog Archive
+description: The official blog for the D Programming Language.
+
+url: "https://dlang.github.io"
+baseurl: "/blog.dlang.org/"
+
+permalink: /:slug/
+
+markdown: kramdown
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
+
+plugins:
+  - jekyll-paginate
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-redirect-from
+
+paginate: 10
+paginate_path: "/page/:num/"
+
+feed:
+  path: "/feed.xml"

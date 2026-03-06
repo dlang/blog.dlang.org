@@ -1,0 +1,104 @@
+---
+---
+@import "syntax";
+
+/* --- Global Reset & Containment --- */
+html, body {
+  margin: 0; padding: 0; overflow-x: hidden; width: 100%; position: relative;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Prevent images from being larger than the text column */
+p img { 
+  display: block; 
+  margin: 25px auto; 
+  max-width: 100%; 
+  height: auto; 
+}
+
+/* Left-float the first image in the article so text flows around it */
+.post-content p:first-of-type img {
+  float: left;
+  display: inline; 
+  margin: 5px 25px 20px 0;
+  max-width: 280px; 
+  border: 1px solid #eee;
+  padding: 5px;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+}
+
+/* Prevents layout collapse if text is shorter than the image */
+.post-content::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Force code blocks to clear floats */
+.post-content pre, 
+.post-content .highlight,
+.post-content blockquote {
+  clear: both;
+  display: block;
+  width: 100%;
+}
+
+/* Do it in D banner shadow */
+.banner-shadow {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 4px;
+    display: block;
+}
+
+.blog-container {
+  max-width: 1200px; margin: 0 auto; padding: 0 20px; box-sizing: border-box;
+}
+
+/* --- Branding & Navigation --- */
+.dlf-header { padding-top: 25px; }
+.dlf-header h1 { font-size: 3em; font-weight: bold; color: #333; margin: 0; }
+
+.nav-bar { 
+  background-color: #b03931; padding: 12px 20px; margin: 15px -20px 0 -20px; 
+}
+.nav-bar ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 15px 35px; }
+.nav-bar a { color: white; text-decoration: none; font-weight: bold; font-size: 0.9em; }
+
+/* --- Main Layout Grid --- */
+.main-grid { 
+  display: flex; flex-direction: column; gap: 40px; margin: 40px 0 0 0; width: 100%;
+}
+
+/* --- Content Styling --- */
+header h1 { font-size: 2.6em; font-weight: bold; color: #000; margin-bottom: 20px; }
+
+/* Rule for post metadata line */
+header p { color: #888; margin-bottom: 40px; border-bottom: 1px solid #eee; padding-bottom: 25px; font-size: 0.9em; }
+
+.tag-link {
+  color: #b03931; text-decoration: none; font-weight: 500;
+  &:hover { text-decoration: underline; }
+}
+
+/* Blockquote & Table Styling */
+blockquote, .post-content blockquote {
+  margin: 40px 0; padding: 5px 30px; border-left: 4px solid #b03931; font-style: italic; color: #333; line-height: 1.6;
+}
+.post-content table { width: 100%; max-width: 800px; border-collapse: collapse; margin: 30px 0; }
+.post-content td, .post-content th { padding: 12px 0; border-bottom: 1px solid #eee; text-align: left; color: #444; }
+
+/* --- Sidebar Styling --- */
+.sidebar-col { text-align: center; }
+.sidebar-col .sidebar-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
+
+/* --- Desktop Enhancements --- */
+@media (min-width: 900px) {
+  .nav-bar { margin-left: -20px; margin-right: -20px; }
+  .main-grid { display: flex; flex-direction: row; gap: 40px; margin-top: 40px; align-items: flex-start; }
+  .article-col { flex: 1; min-width: 0; }
+  .sidebar-col { 
+    width: 300px; flex-shrink: 0; border-left: 1px solid #eee; padding-left: 40px; box-sizing: border-box; text-align: left; 
+  }
+  .sidebar-col .sidebar-section { align-items: flex-start; }
+}

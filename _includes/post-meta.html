@@ -1,0 +1,20 @@
+{% assign item = include.item | default: page %}
+<header>
+  <h2 style="font-size: 2.6em; font-weight: bold; margin-bottom: 15px;">
+    {% if include.is_list %}
+      <a href="{{ item.url | relative_url }}" style="color: #000; text-decoration: none;">{{ item.title }}</a>
+    {% else %}
+      {{ item.title }}
+    {% endif %}
+  </h2>
+
+  <p>
+    {{ item.date | date: "%b %-d, %Y" }}{% if item.author %} • {{ item.author }}{% endif %}
+    {% if item.categories.size > 0 %}
+      • 
+      {% for category in item.categories %}
+        <a href="{{ '/search' | relative_url }}?q={{ category | url_encode }}" class="tag-link">#{{ category | xml_decode }}</a>{% unless forloop.last %}, {% endunless %}
+      {% endfor %}
+    {% endif %}
+  </p>
+</header>
