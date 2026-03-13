@@ -1,8 +1,8 @@
 title: D Language Blog Archive
 description: The official blog for the D Programming Language.
 
-url: "https://dlang.github.io"
-baseurl: "/blog.dlang.org/"
+url: "https://blog.dlang.org"
+baseurl: ""
 
 permalink: /:slug/
 
