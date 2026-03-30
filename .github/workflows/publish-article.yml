@@ -1,0 +1,67 @@
+name: Publish Article
+on:
+  workflow_dispatch:
+    inputs:
+      file_name:
+        description: 'The filename of the draft (e.g., my-awesome-d-article.md)'
+        required: true
+      pub_date:
+        description: 'Optional: Custom date (YYYY-MM-DD). Leave blank for today.'
+        required: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Validate Draft
+        run: |
+          FULL_PATH="prepub/${{ github.event.inputs.file_name }}"
+          
+          # 1. Existence check
+          if [[ ! -f "$FULL_PATH" ]]; then
+            echo "Error: File '$FULL_PATH' not found in the prepub folder."
+            exit 1
+          fi
+          
+          # 2. Date format check (if provided)
+          CUSTOM_DATE="${{ github.event.inputs.pub_date }}"
+          if [[ -n "$CUSTOM_DATE" && ! "$CUSTOM_DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "Error: Custom date must be in YYYY-MM-DD format."
+            exit 1
+          fi
+          
+          # 3. Front Matter gatekeeping
+          if ! head -n 1 "$FULL_PATH" | grep -q "^---$"; then
+            echo "Error: Missing starting Front Matter delimiter (---) in $FULL_PATH"
+            exit 1
+          fi
+
+      - name: Prepare Destination Path
+        id: prep
+        run: |
+          # Use custom date or default to current server date
+          INPUT_DATE="${{ github.event.inputs.pub_date }}"
+          DATE=${INPUT_DATE:-$(date +'%Y-%m-%d')}
+          
+          # Strip any existing YYYY-MM-DD prefix from the filename to prevent double-dating
+          CLEAN_FILENAME=$(echo "${{ github.event.inputs.file_name }}" | sed -E 's/^[0-9]{4}-[0-9]{2}-[0-9]{2}-//')
+          
+          NEW_FILENAME="${DATE}-${CLEAN_FILENAME}"
+          echo "new_path=_posts/live/${NEW_FILENAME}" >> $GITHUB_OUTPUT
+
+      - name: Move File to Live
+        run: |
+          mkdir -p _posts/live
+          # Use mv to relocate from prepub to the calculated live path
+          mv "prepub/${{ github.event.inputs.file_name }}" "${{ steps.prep.outputs.new_path }}"
+
+      - name: Commit and Sync
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Published: ${{ steps.prep.outputs.new_path }}"
+          file_pattern: "_posts/live/* prepub/*"
