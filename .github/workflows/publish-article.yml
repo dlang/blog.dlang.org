@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       file_name:
-        description: 'The filename of the draft (e.g., my-awesome-d-article.md)'
+        description: 'The filename of the draft in _posts/prepub/ (e.g., my-awesome-d-article.md)'
         required: true
       pub_date:
         description: 'Optional: Custom date (YYYY-MM-DD). Leave blank for today.'
