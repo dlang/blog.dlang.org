@@ -24,6 +24,7 @@ Complex numbers are heavily used in control systems, signal processing, graphics
 
 Historically, we had a hard time compiling C complex numbers in ImportC. It was even harder, sometimes impossible, to compile libraries with complex signatures, like the scientific **s7** library. There have been massive improvements in compiling such code, and we can now compile almost any C complex number code. Below is a simple code snippet that now compiles successfully with D:
 
+{% raw %}
 ```c
 #include <complex.h>
 #include <stdio.h>
@@ -51,6 +52,7 @@ int main()
     return 0;
 }
 ```
+{% endraw %}
 
 ## Deepening C99 support
 
@@ -58,6 +60,7 @@ int main()
 
 ImportC can now compile C's designated initializers. If you have tried compiling C code involving designated initializers in the past, you will have realized that nested struct initializers were not supported and caused compiler errors. This has been significantly improved and fixed.
 
+{% raw %}
 ```c
 struct top
 {
@@ -94,6 +97,7 @@ struct Bar test = {
     .u.f = 13
 };
 ```
+{% endraw %}
 
 This is a simple snippet we can look at as an example of support for C struct designated initializers. As with C, you can go as deep as you want, and D will compile that for you while ensuring your struct members contain the desired data.
 
@@ -101,16 +105,19 @@ This is a simple snippet we can look at as an example of support for C struct de
 
 Taking the address of compound literals with ImportC did not compile before. This has been fixed, and compound literals can now be used as lvalues with ImportC.
 
+{% raw %}
 ```c
 int *c = &(int){90};
 ```
+{% endraw %}
 
-This is an integer pointer referencing a temporary `int` initialized to `90`. Rest assured that you will read `90` at the memory address pointed to by `c`.
+This is an integer pointer referencing a temporary {% raw %}`int`{% endraw %} initialized to {% raw %}`90`{% endraw %}. Rest assured that you will read {% raw %}`90`{% endraw %} at the memory address pointed to by {% raw %}`c`{% endraw %}.
 
 ### Function and Variable Redeclarations
 
 Function redeclarations are permissible in a local scope in C. We now do a great job compiling such redeclarations without compiler errors. Also, extern variable redeclarations at global scope have been hardened. ImportC has greatly improved type checking for both global and local redeclarations.
 
+{% raw %}
 ```c
 /* for variables */
 extern int x;
@@ -120,6 +127,7 @@ extern char x
 int foo();
 double foo();
 ```
+{% endraw %}
 
 As in C, this is not permissible, and D has greatly improved to ensure these cases are checked.
 
@@ -141,6 +149,7 @@ Redeclaration of global variables was initially problematic, as it often led to 
 
 We previously had a difficult time creating static libraries from C modules, especially those involving forward declarations. Work has been done toward this, and we can now successfully create static libraries from C modules.
 
+{% raw %}
 ```c
 static void static_fun();
 
@@ -153,8 +162,9 @@ static void static_fun()
 {
 }
 ```
+{% endraw %}
 
-You will need to pass the `-lib` command-line option when creating a static library. `dmd -lib file.c` now supports this workflow.
+You will need to pass the {% raw %}`-lib`{% endraw %} command-line option when creating a static library. {% raw %}`dmd -lib file.c`{% endraw %} now supports this workflow.
 
 ## Community Acknowledgement
 
