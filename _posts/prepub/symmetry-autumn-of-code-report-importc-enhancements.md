@@ -10,19 +10,19 @@ categories:
   - Community
 ---
 
-Having a central compiler that can compile code from other interoperable languages has long been one of D's major goals. And of course, that language is C. Over the years, D has adopted a powerful initiative to compile C code directly through ImportC, and several improvements were made during the 2025 term of Symmetry Autumn of Code. 
+Having a central compiler that can compile code from other interoperable languages has long been one of D's major goals. And of course, the best supported language is C. Over the years, D has adopted a powerful initiative to compile C code directly through [a feature called ImportC](https://dlang.org/spec/importc.html).
 
-You can [read more on ImportC here](https://dlang.org/spec/importc.html).
+The D programming community has engineered powerful compilers with very fast compile times. C has many libraries that are widely used in numerous systems. Considering D's edge in performance and safety, the ability to compile legacy C code enhances the ease of adoption in several domains. For example, a ticketing system written in C that has functioned for years cannot easily be rewritten in a modern programming language just to improve it. Not every development team is ready for that, considering the cost of re-engineering.
 
-The D programming community has engineered powerful compilers with very fast compile times. C has many libraries that are widely used in numerous systems. Considering D's edge in performance and safety, the ability to compile legacy C code enhances the ease of adoption in several domains. For example, a ticketing system written in C that has functioned for years cannot be easily rewritten in a modern programming language just to improve it. Not every development team is ready for that, considering the cost of re-engineering.
+Several improvements to ImportC were made during the 2025 edition of [Symmetry Autumn of Code](https://saoc.io/), plugging some of the holes that hindered interoperability.
 
 ## Breaking Through Technical Barriers
 
 ### Complex numbers and s7 library support
 
-Complex numbers are heavily used in control systems, signal processing, graphics, and scientific computing. C has been the language of choice for writing libraries used in high-performance DSP, embedded systems, and real-time signal pipelines. 
+Complex numbers are heavily used in control systems, signal processing, graphics, and scientific computing. C has been the language of choice for writing libraries used in high-performance DSP, embedded systems, and real-time signal pipelines.
 
-Historically, we had a hard time compiling C complex numbers from the frontend. It was even harder, sometimes impossible, to compile libraries with complex signatures, like the scientific **s7** library. There have been massive improvements in compiling such code, and we can now compile almost any C complex code. Below is a simple code snippet that now compiles successfully with D:
+Historically, we had a hard time compiling C complex numbers in ImportC. It was even harder, sometimes impossible, to compile libraries with complex signatures, like the scientific **s7** library. There have been massive improvements in compiling such code, and we can now compile almost any C complex number code. Below is a simple code snippet that now compiles successfully with D:
 
 ```c
 #include <complex.h>
@@ -94,7 +94,8 @@ struct Bar test = {
     .u.f = 13
 };
 ```
-This is a simple snippet we can look at to the implementation of C struct designated initializers. As with C, you can go as deep as you want, and we will compile that for you while ensuring your struct members contain the desired data.
+
+This is a simple snippet we can look at as an example of support for C struct designated initializers. As with C, you can go as deep as you want, and D will compile that for you while ensuring your struct members contain the desired data.
 
 ### Compound Literals
 
@@ -103,7 +104,8 @@ Taking the address of compound literals with ImportC did not compile before. Thi
 ```c
 int *c = &(int){90};
 ```
-This is an integer pointer referencing a temporary int initialized to 90. Rest assured that you will read 90 at the memory address pointed to by `c`.
+
+This is an integer pointer referencing a temporary `int` initialized to `90`. Rest assured that you will read `90` at the memory address pointed to by `c`.
 
 ### Function and Variable Redeclarations
 
@@ -118,19 +120,20 @@ extern char x
 int foo();
 double foo();
 ```
-Like in C, this is not permissible, and D has greatly improved to ensure these cases are checked.
+
+As in C, this is not permissible, and D has greatly improved to ensure these cases are checked.
 
 ### C Macros
 
-Macros defined in C programs can now be imported from D. These can be easily passed as flags or function arguments, depending on your use case. While this hasn't always functioned well in the past, especially when imported and used in D code, significant improvements have been made. Beyond that, several builtin macros have also been implemented in the compiler.
+Macros defined in C programs can now be imported from D. These can be easily passed as flags or function arguments, depending on your use case. While this hasn't always functioned well in the past, especially when imported and used in D code, significant improvements have been made. Beyond that, several built-in macros have also been implemented in the compiler.
 
-## Builtins support, Backend, and Linking Wins
+## Built-ins support, Backend, and Linking Wins
 
-### GNU GCC CRC builtins
+### GNU GCC CRC built-ins
 
-Most of the GNU GCC Cyclic Redundancy Check (CRC) builtins have been implemented. If any C function referencing them is used in D, we provide the necessary builtin implementation.
+Most of the GNU GCC Cyclic Redundancy Check (CRC) built-ins have been implemented. If any C function referencing them is used in D, we provide the necessary built-in implementation.
 
-### DMD Backend Symbol duplication
+### DMD backend symbol duplication
 
 Redeclaration of global variables was initially problematic, as it often led to symbol duplication in the symbol table, particularly in DMD. This has been fixed, allowing D to link against large-scale C libraries that rely on redundant global declarations across multiple headers.
 
@@ -150,8 +153,9 @@ static void static_fun()
 {
 }
 ```
+
 You will need to pass the `-lib` command-line option when creating a static library. `dmd -lib file.c` now supports this workflow.
 
 ## Community Acknowledgement
 
-This work was done through the 2025 Symmetry Autumn of Code. A big thank you to the D mentors, the D community, and Symmetry Investments for sponsoring this.
+This work was done through the 2025 [Symmetry Autumn of Code](https://saoc.io/). A big thank you to the D mentors and the D community, and to Symmetry Investments for sponsoring the event.
