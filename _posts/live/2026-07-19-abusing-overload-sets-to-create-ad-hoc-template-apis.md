@@ -39,18 +39,18 @@ What exactly is {% raw %}`bar`{% endraw %} when passed to {% raw %}`useIt`{% end
 [The specification](https://dlang.org/spec/function.html#overload-sets):
 
 
-    An Overload Set is the set of functions with the same name declared in the same scope that participate in overload resolution.
+> An Overload Set is the set of functions with the same name declared in the same scope that participate in overload resolution.
 
 
 And from [the alias spec](https://dlang.org/spec/declaration.html#alias-overload):
 
-    Aliases can also 'import' a set of overloaded functions that can be overloaded with functions in the current scope...
+> Aliases can also 'import' a set of overloaded functions that can be overloaded with functions in the current scope...
 
 The behavior of overload sets is scattered across the spec. A few sentences here, a few more tucked away in the template section. Template specialization lets you pattern-match against the whole set; pick the right implementation based on compile-time arguments.
 
 Overload sets can work with several very different things. I use the following definition:
 
-    An overload set is a collection of things that share a name and a closely related template header.
+> An overload set is a collection of things that share a name and a closely related template header.
 
 You may not know everything that can be templatized, and real-world template usage is extremely concerned about making only one declaration match at a time.
 
