@@ -1,4 +1,3 @@
-
 ---
 title: (Ab)using Overload Sets to Create Ad-Hoc Template APIs
 author: Michael Boston
