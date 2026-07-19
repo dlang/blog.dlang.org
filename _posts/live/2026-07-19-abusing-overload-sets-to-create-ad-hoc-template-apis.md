@@ -185,7 +185,7 @@ With {% raw %}`type`{% endraw %} and {% raw %}`value`{% endraw %} specialization
 Overload sets aren't exotic. Combine them with template specialization and you get ad-hoc APIs that support multiple access patterns without duplicating code. Build your types to play nice with meta-programs, design your APIs to take overload sets, and let users swap in their own implementations. This works even for more complex APIs such as {% raw %}`std.conv.to`{% endraw %}.
 
 ---
-Based on 2 chapters from my "book" ['Black Magic in D'](https://crazymonkyyy.github.io/blackmagic-in-d/).
+Based on 2 chapters from my book, ['Black Magic in D'](https://crazymonkyyy.github.io/blackmagic-in-d/).
 
 https://crazymonkyyy.github.io/
 
