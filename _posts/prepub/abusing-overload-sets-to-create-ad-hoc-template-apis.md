@@ -12,7 +12,7 @@ categories:
   - Tutorials
 ---
 
-Overload sets are a "term of art", seemingly arising from reusing overload rules over the years. They quietly power a lot of D's generic programming—and once you understand them explicitly, a whole class of API design opens up.
+"Overload set" is a term of art that seemingly arises from the reuse of overload rules across the years. Overload sets quietly power a lot of D's generic programming, and once you understand them explicitly, a whole class of API design opens up.
 
 ```d
 import std;
@@ -31,27 +31,23 @@ unittest { useIt!bar; }
 
 ```
 
-What exactly is `bar` when passed to `useIt`? Wait, does it *survive* as `useIt.F`? (yes, compiles as is)
+What exactly is `bar` when passed to `useIt`? Wait, does it *survive* as `useIt.F`? (Yes, it compiles as is.)
 
 ## What Are Overload Sets?
 
-The specification:
+[The specification](https://dlang.org/spec/function.html#overload-sets):
 
-```
-Functions declared at the same scope overload against each
-other, and are called an *Overload Set*.
-```
 
-And from the alias section:
+    An Overload Set is the set of functions with the same name declared in the same scope that participate in overload resolution.
 
-```
-Aliases can also 'import' a set of overloaded functions, that can
-be overloaded with functions in the current scope
-```
 
-The behavior of overload sets is scattered across the spec. A few sentences here, a few more tucked away in the template section. Template specialization lets you pattern-match against the whole set—pick the right implementation based on compile-time arguments.
+And from [the alias spec](https://dlang.org/spec/declaration.html#alias-overload):
 
-Overload sets can work with several very different things, I use the following definition:
+    Aliases can also 'import' a set of overloaded functions that can be overloaded with functions in the current scope...
+
+The behavior of overload sets is scattered across the spec. A few sentences here, a few more tucked away in the template section. Template specialization lets you pattern-match against the whole set; pick the right implementation based on compile-time arguments.
+
+Overload sets can work with several very different things. I use the following definition:
 
     An overload set is a collection of things that share a name and a closely related template header.
 
@@ -79,7 +75,7 @@ static foreach (i; 0 .. typeAtLength) {
 // prints: int, float, string
 ```
 
-By treating `value` specialization of ints as an "array", you can make an overload set that is foreachable. You can build compile-time lookup tables, generate code for each type in the set, and dispatch based on integer constants, etc.
+By treating `value` specialization of `int`s as an array, you can make an overload set that is foreachable. You can build compile-time lookup tables, generate code for each type in the set, and dispatch based on integer constants, etc.
 
 ## Real-World Pattern: Unified Vector Interface
 
@@ -98,7 +94,7 @@ struct GVec3(T) { T x, y, z; }
 struct GVec4(T) { T x, y, z, w; }
 ```
 
-You can't write "works on any N-dimensional vector"; the dimension is stuck in the type name. To specialize on dimension, you can expand the shared template header to include an int parameter.
+You can't write "works on any N-dimensional vector"; the dimension is stuck in the type name. To specialize on dimension, you can expand the shared template header to include an `int` parameter.
 
 ```d
 alias GVec2(T = float) = GVec!(2, T); // (optional, allows backwards compatibility)
@@ -131,15 +127,13 @@ unittest {
 
 ### The Ad-hoc Template API
 
-This is an **Ad-hoc Template API**. Note that no primary `struct GVec(int N, T)` exists in the source code. The symbol `GVec` exists only as a collection of specializations. The API is a coordinate map of successful matches. You are programming against the existence of a match in the resolution logic rather than a central definition.
+The above is an **Ad-hoc Template API**. Note that no primary `struct GVec(int N, T)` exists in the source code. The symbol `GVec` exists only as a collection of specializations. The API is a coordinate map of successful matches. You are programming against the existence of a match in the resolution logic rather than a central definition.
 
     The API that can be named is not the immortal API. -monkyyy-tzu
 
-
-
 ## Swapping an Overload Set
 
-`std.conv.to` is an overload set with the implied syntax of `.to!T`; you can let users pass their own instead for serialization.
+`std.conv.to` is an overload set with the implied syntax of `.to!T`. You can let users pass their own instead for serialization.
 
 ```d
 template someSerializeFunc(alias TO_ = void, Args...)(Args args) {
@@ -154,7 +148,7 @@ template someSerializeFunc(alias TO_ = void, Args...)(Args args) {
 
 ```
 
-This code uses the default `std.conv.to` unless the user provides their own. So long as the user matches the ad-hoc API of `to`, they can extend it (and fix its edge cases). This flexible API, with an overloadable-overload-set, lets users fix behavior. 
+This code uses the default `std.conv.to` unless the user provides their own. So long as the user matches the ad-hoc API of `to`, they can extend it (and fix its edge cases). This flexible API, with an overloadable-overload-set, lets users fix behavior.
 
 ## Shared Header Mechanics
 
@@ -167,19 +161,18 @@ template foo(int I : 2) {
 struct foo(int I : 3) {
     int myint = 3;
 }
-
 ```
 
 The overload set resolution and specialization mechanisms work on all types of templates in D. The compiler only cares about something matching the template header; you can define it however you want and make ad-hoc APIs.
 
-With `type` and `value` specialization shared across at least four declaration patterns, which of your problems could be approached by asking: "How can I define a good template header"?
+With `type` and `value` specialization shared across at least four declaration patterns, which of your problems could be approached by asking, "How can I define a good template header"?
 
 ## Conclusion
 
 Overload sets aren't exotic. Combine them with template specialization and you get ad-hoc APIs that support multiple access patterns without duplicating code. Build your types to play nice with meta-programs, design your APIs to take overload sets, and let users swap in their own implementations. This works even for more complex APIs such as `std.conv.to`.
 
 ---
-Based on 2 chapters from my "book" ["Black Magic in D"](https://crazymonkyyy.github.io/blackmagic-in-d/).
+Based on 2 chapters from my "book" ['Black Magic in D'](https://crazymonkyyy.github.io/blackmagic-in-d/).
 
 https://crazymonkyyy.github.io/
 
