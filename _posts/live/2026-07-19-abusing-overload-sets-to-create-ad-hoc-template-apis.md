@@ -58,27 +58,33 @@ You may not know everything that can be templatized, and real-world template usa
 
 {% raw %}
 ```d
-alias typeAt(int I : 0) = int;
-alias typeAt(int I : 1) = float;
-alias typeAt(int I : 2) = string;
-enum typeAtLength = Length!typeAt;
+// template overloads with an integer value parameter
+alias typeAt(int i : 0) = int;
+alias typeAt(int i : 1) = float;
+alias typeAt(int i : 2) = string;
 
-template Length(alias A, int acc=0){ // returns the pseudo-length of an overloadset
-    static if( ! __traits(compiles,A!acc) ){
-        enum Length=acc;
+// Gives the number of templates accepting successive integers from 0
+// Params: A = an overload set
+template countTemplates(alias A, int acc = 0) {
+    static if (__traits(compiles, A!acc)) {
+        // `A!acc` is valid, recurse with next integer
+        enum countTemplates = countTemplates!(A, acc + 1);
     } else {
-        enum Length=Length!(A,acc+1);
+        // `A!acc` is invalid, make `acc` the result
+        enum countTemplates = acc;
     }
 }
 
-static foreach (i; 0 .. typeAtLength) {
-    pragma(msg, typeAt!i.stringof);
+enum count = countTemplates!typeAt;
+
+static foreach (i; 0 .. count) {
+    pragma(msg, typeAt!i);
 }
-// prints: int, float, string
+// prints: int float string
 ```
 {% endraw %}
 
-By treating {% raw %}`value`{% endraw %} specialization of {% raw %}`int`{% endraw %}s as an array, you can make an overload set that is foreachable. You can build compile-time lookup tables, generate code for each type in the set, and dispatch based on integer constants, etc.
+By treating value specialization of {% raw %}`int`{% endraw %}s as an array, you can make an overload set that is foreachable. You can build compile-time lookup tables, generate code for each type in the set, and dispatch based on integer constants, etc.
 
 ## Real-World Pattern: Unified Vector Interface
 
@@ -107,36 +113,36 @@ alias GVec2(T = float) = GVec!(2, T); // (optional, allows backwards compatibili
 alias GVec3(T = float) = GVec!(3, T);
 alias GVec4(T = float) = GVec!(4, T);
 
-// struct GVec(int N, T); // implicit, no primary definition exists
+// struct GVec(int n, T); // implicit, no primary definition exists
 
-struct GVec(int N : 2, T) { T x = 0; T y = 0; }
-struct GVec(int N : 3, T) { T x = 0; T y = 0; T z = 0; }
-struct GVec(int N : 4, T) { T x = 0; T y = 0; T z = 0; T w = 0; }
+struct GVec(int n : 2, T) { T x = 0; T y = 0; }
+struct GVec(int n : 3, T) { T x = 0; T y = 0; T z = 0; }
+struct GVec(int n : 4, T) { T x = 0; T y = 0; T z = 0; T w = 0; }
 ```
 {% endraw %}
 
-Now you can write functions that take {% raw %}`GVec!(N, T)`{% endraw %} and work across any dimension. Pattern-matching on {% raw %}`N`{% endraw %} at compile time allows you to easily access {% raw %}`N`{% endraw %} in trivial meta-code:
+Now you can write functions that take {% raw %}`GVec!(n, T)`{% endraw %} and work across any dimension. Pattern-matching on {% raw %}`n`{% endraw %} at compile time allows you to easily access {% raw %}`n`{% endraw %} in trivial meta-code:
 
 {% raw %}
 ```d
-void print(int N, T)(GVec!(N, T) v) {
+void print(int n, T)(GVec!(n, T) v) {
     import std;
-    writeln("Vector of dimension ", N, " with type ", T.stringof);
-    static foreach (c; "xyzw"[0 .. N]) {
+    writeln("Vector of dimension ", n, " with type ", T.stringof);
+    static foreach (c; "xyzw"[0 .. n]) {
         writeln(c, ": ", mixin("v." ~ c));
     }
 }
 
 unittest {
-    IVec3(1, 4, 7).print;
-    DVec4(2, 6, 0, 0).print;
+    GVec3!int(1, 4, 7).print;
+    GVec4!double(2, 6, 0, 0).print;
 }
 ```
 {% endraw %}
 
 ### The Ad-hoc Template API
 
-The above is an **Ad-hoc Template API**. Note that no primary {% raw %}`struct GVec(int N, T)`{% endraw %} exists in the source code. The symbol {% raw %}`GVec`{% endraw %} exists only as a collection of specializations. The API is a coordinate map of successful matches. You are programming against the existence of a match in the resolution logic rather than a central definition.
+The above is an **Ad-hoc Template API**. Note that no primary {% raw %}`struct GVec(int n, T)`{% endraw %} exists in the source code. The symbol {% raw %}`GVec`{% endraw %} exists only as a collection of specializations. The API is a coordinate map of successful matches. You are programming against the existence of a match in the resolution logic rather than a central definition.
 
     The API that can be named is not the immortal API. -monkyyy-tzu
 
@@ -165,20 +171,20 @@ This code uses the default {% raw %}`std.conv.to`{% endraw %} unless the user pr
 
 {% raw %}
 ```d
-enum foo(int I : 0) = 0;
-int foo(int I : 1)(int) => 1;
-template foo(int I : 2) {
+enum foo(int i : 0) = 0;
+int foo(int i : 1)(int) => 1;
+template foo(int i : 2) {
     int foo = 2;
 }
-struct foo(int I : 3) {
+struct foo(int i : 3) {
     int myint = 3;
 }
 ```
 {% endraw %}
 
-The overload set resolution and specialization mechanisms work on all types of templates in D. The compiler only cares about something matching the template header; you can define it however you want and make ad-hoc APIs.
+The overload set resolution and specialization mechanisms work on all kinds of templates in D. The compiler only cares about something matching the template header; you can define it however you want and make ad-hoc APIs.
 
-With {% raw %}`type`{% endraw %} and {% raw %}`value`{% endraw %} specialization shared across at least four declaration patterns, which of your problems could be approached by asking, "How can I define a good template header"?
+With type and value specialization shared across at least four declaration patterns, which of your problems could be approached by asking, "How can I define a good template header"?
 
 ## Conclusion
 
