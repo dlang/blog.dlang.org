@@ -27,17 +27,17 @@ For a quick case study, consider equivalent snippets. A deeply nested Python fun
 
 Dynamic languages shine for rapid iteration, but their flexibility can demand extra tokens from the LLM. In duck-typed environments like Python or JavaScript, a variable's behavior emerges only through usage. When an LLM builds context, it often needs surrounding code, comments, or explicit hints to infer "this variable quacks like a list here, but might be something else later."
 
-Statically typed languages flip the script. In D, a parameter declared as `int[] arr` or a struct with explicit methods tells the model exactly what operations are valid, right there in the signature. No detective tokens required.
+Statically typed languages flip the script. In D, a parameter declared as {% raw %}`int[] arr`{% endraw %} or a struct with explicit methods tells the model exactly what operations are valid, right there in the signature. No detective tokens required.
 
 The result? When using LLMs with duck-typed languages, the model often spends more tokens reconstructing intent. Explicit types and consistent call-site semantics in D let it focus on logic instead of inference.
 
 ## Features That Make Refactoring LLM-Friendly
 
-Language design choices ripple through edit tasks. One classic pain point in C++ is the distinction between `.` for value types and `->` for pointers/references. Change a type from `Foo` to `Foo*`, and suddenly every member access across the codebase flips operators. LLMs tasked with this refactor must hunt down and update dozens, or hundreds, of call-sites, burning tokens on repetitive churn.
+Language design choices ripple through edit tasks. One classic pain point in C++ is the distinction between {% raw %}`.`{% endraw %} for value types and {% raw %}`->`{% endraw %} for pointers/references. Change a type from {% raw %}`Foo`{% endraw %} to {% raw %}`Foo*`{% endraw %}, and suddenly every member access across the codebase flips operators. LLMs tasked with this refactor must hunt down and update dozens, or hundreds, of call-sites, burning tokens on repetitive churn.
 
-D sidesteps this entirely. Member access uses the dot operator uniformly for structs, classes, and even pointers to them. No `->` operator exists for this purpose. Refactoring a value type to a reference (or vice versa) often requires only changing the declaration and a few dereferences, far less widespread editing.
+D sidesteps this entirely. Member access uses the dot operator uniformly for structs, classes, and even pointers to them. No {% raw %}`->`{% endraw %} operator exists for this purpose. Refactoring a value type to a reference (or vice versa) often requires only changing the declaration and a few dereferences, far less widespread editing.
 
-D brings additional plasticity through Uniform Function Call Syntax (UFCS). Any free function can be called as a method: `foo(bar)` becomes `bar.foo()`. This enables seamless chaining and lets you extend types without modifying their definitions. When an LLM suggests adding a helper, you can often integrate it via UFCS without touching call sites or introducing new boilerplate.
+D brings additional plasticity through Uniform Function Call Syntax (UFCS). Any free function can be called as a method: {% raw %}`foo(bar)`{% endraw %} becomes {% raw %}`bar.foo()`{% endraw %}. This enables seamless chaining and lets you extend types without modifying their definitions. When an LLM suggests adding a helper, you can often integrate it via UFCS without touching call sites or introducing new boilerplate.
 
 Other D features amplify this. Compile-time function execution (CTFE) and powerful templates let the compiler handle complexity that might otherwise require verbose runtime code in other languages. When prompting for changes, the model can lean on these abstractions rather than generating repetitive patterns.
 
