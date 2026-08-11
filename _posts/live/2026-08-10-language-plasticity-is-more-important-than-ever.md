@@ -48,7 +48,7 @@ Yet the picture isn't purely about fewer tokens. Static typing provides immediat
 
 Ultimately, token efficiency is one factor among many. D's compile-time feedback, memory safety options, and expressiveness pair well with rapid AI iteration. Whether you land on "static wins on cost" or "dynamic saves so much time" depends on your workload. The real experiment? Try prompting the same task in D versus Python or C++, measure the tokens, and see what your budget (and your code) tells you.
 
-What are your experiences prompting LLMs in D? Drop a comment in the forums. I'm genuinely curious how the community is navigating this new landscape.
+What are your experiences prompting LLMs in D? [Drop a comment in the forums](https://forum.dlang.org/thread/swzlyffmblxndcrjxfrv@forum.dlang.org). I'm genuinely curious how the community is navigating this new landscape.
 
 ---
 
