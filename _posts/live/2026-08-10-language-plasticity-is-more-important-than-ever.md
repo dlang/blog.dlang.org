@@ -3,10 +3,9 @@ title: Language Plasticity is More Important Than Ever
 author: Adam Wilson
 
 categories:
-  - Machine Learning
+  - LLMs
   - Community
   - Guest Posts
-  - Tutorials
 ---
 
 Large language models are rewriting how we build software. From quick prototypes to full features, prompting an LLM to generate or refactor code in the D programming language feels increasingly natural. But as context windows grow and API bills mount, a subtler question emerges: does the language itself influence how many tokens an LLM consumes and therefore how much it costs to work with?
