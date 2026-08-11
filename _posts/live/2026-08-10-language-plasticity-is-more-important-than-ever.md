@@ -54,9 +54,9 @@ What are your experiences prompting LLMs in D? Drop a comment in the forums. I'm
 ---
 
 *References and further reading:*
-- "How Code Formatting Silently Consumes Your LLM Budget" (arXiv): https://arxiv.org/html/2508.13666v1
-- "Which programming languages are most token-efficient?" (martinalderson.com): https://martinalderson.com/posts/which-programming-languages-are-most-token-efficient/
-- D Language Tour – Uniform Function Call Syntax: https://tour.dlang.org/tour/en/gems/uniform-function-call-syntax-ufcs
-- D forums discussion on struct/class member access: https://forum.dlang.org/thread/mbwkdoomvqhhtdidyxce@forum.dlang.org
+- [How Code Formatting Silently Consumes Your LLM Budget](https://arxiv.org/html/2508.13666v1)
+- [Which programming languages are most token-efficient?](https://martinalderson.com/posts/which-programming-languages-are-most-token-efficient/)
+- [D Language Tour – Uniform Function Call Syntax](https://tour.dlang.org/tour/en/gems/uniform-function-call-syntax-ufcs)
+- [D forums discussion on struct/class member access](https://forum.dlang.org/thread/mbwkdoomvqhhtdidyxce@forum.dlang.org)
 
 Happy coding—and may your token counts be ever in your favor!
