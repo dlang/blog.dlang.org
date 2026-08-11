@@ -8,7 +8,7 @@ categories:
   - Project Highlights
   - Tutorials
   - Code
-  - Machine Learning
+  - LLMs
 ---
 
 I've been writing D for a long time. [DaNode](https://github.com/DannyArends/DaNode), my self-contained web server, has been running in production for over 12 years. [DImGui](https://github.com/DannyArends/DImGui) is a full SDL + Vulkan renderer that supports skeletal animations via the Open Asset Import Library, HDR lighting, and compute shaders, written entirely in D calling into external libraries via {% raw %}`ImportC`{% endraw %}. So when I decided to build a local agentic large language model (LLM) ([DLLM](https://github.com/DannyArends/DLLM)) from scratch, I'd sooner write it in Brainfuck than reach for Python. To be fair, the Python LLM ecosystem is enormous. However, by the time you have a working agent, you're sitting on top of a framework, which wraps a library, which calls into C++ via ctypes, which dispatches to CUDA kernels. Python all the way down to the metal, with several layers of abstraction you didn't write and can't easily debug. I wanted to understand what was actually happening.
